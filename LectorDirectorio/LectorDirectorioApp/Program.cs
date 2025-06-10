@@ -45,7 +45,7 @@ class Program
 
             Console.WriteLine($"- {name} ({sizeKB} KB)");
 
-            csv.AppendLine($"-{name}, {sizeKB}, {modified}");
+            csv.AppendLine($"-{name}; {sizeKB}; {modified}");
         }
 
         //Guardar CSV
