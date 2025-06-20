@@ -1,4 +1,75 @@
-﻿using System;
+﻿﻿internal class Program
+{
+    private static void Main(string[] args)
+    {
+        string path = "";
+
+        do
+        {
+            Console.WriteLine("Ingrese la ruta de la carpeta a analizar:");
+            path = Console.ReadLine();
+        } while (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path));
+
+        if (Directory.Exists(path))
+        {
+            var directories = Directory.GetDirectories(path);
+            var files = Directory.GetFiles(path);
+
+            if (directories.Length > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"Listados de directorios en {path}");
+                Console.ResetColor();
+                foreach (var directory in directories)
+                {
+                    var nameDirectory = Path.GetFileName(directory);
+                    Console.WriteLine(nameDirectory);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"El directorio {path} no contiene subdirectorios");
+            }
+
+            Console.WriteLine();
+            if (files.Length > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine($"Listados de archivos en {path}");
+                Console.ResetColor();
+
+                string path_file = "reporte_archivos.csv";
+                string path_reporte = Path.Combine(path, path_file);
+
+                using (var stream = new StreamWriter(path_reporte))
+                {
+
+                    stream.WriteLine($"Nombre del Archivo;   Tamaño (KB);   Fecha de ultima modificacion");
+                    foreach (var item in files)
+                    {
+                        string nombre = Path.GetFileName(item);
+                        var info = new FileInfo(item);
+                        var length = info.Length / 1024.0;
+                        var date = info.LastWriteTime;
+                        Console.WriteLine($" {nombre} - Tamaño {info.Length / 1024} KB ");
+                        stream.WriteLine($"{nombre};{length};{date}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"El directorio {path} no contiene archivos");
+            }
+
+        }
+        else
+        {
+            Console.WriteLine($"No se encontro el directorio: {path}");
+        }
+
+    }
+}
+/*using System;
 using System.IO;
 using System.Text;
 
@@ -55,3 +126,4 @@ class Program
         Console.WriteLine($"-\nInforme generado: {outputCsv}");
     }
 }
+*/
